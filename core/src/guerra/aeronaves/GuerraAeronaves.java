@@ -79,7 +79,7 @@ public class GuerraAeronaves extends Game {
         music_edicion = Gdx.audio.newMusic(Gdx.files.internal("sonidos/musica_edicion.mp3"));
         music_juego = Gdx.audio.newMusic(Gdx.files.internal("sonidos/musica_juego.mp3"));
 
-        setScreenMenuPrincipal();
+        setScreenConexion();
     }
 
     @Override
@@ -96,8 +96,8 @@ public class GuerraAeronaves extends Game {
         setScreen(new ScreenMenuPrincipal(this));
         setMusica(music_menu);
     }
-    public void setScreenJuego() {
-        setScreen(new ScreenJuego(this));
+    public void setScreenJuego(ConexionTeclas ct) {
+        setScreen(new ScreenJuego(this, ct));
         setMusica(music_juego);
     }
     public void setScreenMenuEditar() {
@@ -117,6 +117,10 @@ public class GuerraAeronaves extends Game {
     public void setScreenFinalizacionJuego(Ganador ganador) {
         setScreen(new ScreenFinalizacionJuego(this, ganador));
         setMusica(music_edicion);
+    }
+    
+    public void setScreenConexion() {
+        setScreen(new ScreenConexion(this));
     }
     
     public ScreenEditorNuevo getScreenEditorNuevo() {

@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
+import guerra.aeronaves.ConexionTeclas;
 import guerra.aeronaves.Direccion;
 import guerra.aeronaves.Ganador;
 import guerra.aeronaves.GuerraAeronaves;
@@ -62,7 +63,9 @@ public class Juego {
     private final Timer timer;
     private long ticks;
     
-    public Juego(Stage stage, int matrizMapa[][]) {
+    private final ConexionTeclas conexionTeclas;
+    
+    public Juego(Stage stage, int matrizMapa[][], ConexionTeclas ct) {
         this.stage = stage;
         this.matrizMapa = matrizMapa;
         Image fondo = new Image(new SpriteDrawable(new Sprite(new Texture(
@@ -84,6 +87,8 @@ public class Juego {
         
         timer = new Timer();
         ticks = 0;
+        
+        conexionTeclas = ct;
     }
     
     // Inicia el reloj del juego.
@@ -94,11 +99,18 @@ public class Juego {
                 ticks = (ticks == Long.MAX_VALUE) ? 0 : ticks + 1;
                 
                 if (ticks % GuerraAeronaves.TICKS_DETECCION_TECLAS == 0) {
-                    detectarTeclas(avionAzul, Keys.W, Keys.S, Keys.A, Keys.D, Keys.SPACE);
-                    detectarTeclas(avionRojo, Keys.UP, Keys.DOWN, Keys.LEFT, Keys.RIGHT, Keys.CONTROL_RIGHT);                    
+                    //detectarTeclasViejo(avionAzul, Keys.W, Keys.S, Keys.A, Keys.D, Keys.SPACE);
+                    TeclasPresionadas tpAvionAzul = detectarTeclas(
+                              Keys.W
+                            , Keys.D
+                            , Keys.S
+                            , Keys.A
+                            , Keys.SPACE);
+                    //procesarTeclasPresionadas(avionAzul, tpAvionAzul);                                           
+                    conexionTeclas.enviarMensajeTeclas(tpAvionAzul);
                 }
                 
-                if (ticks % GuerraAeronaves.TICKS_ACTUALIZACION_PROYECTILES == 0) {
+                /*if (ticks % GuerraAeronaves.TICKS_ACTUALIZACION_PROYECTILES == 0) {
                     actualizarProyectiles(buscarProyectiles(elementos));
                 }
                 
@@ -114,7 +126,7 @@ public class Juego {
                     detectarColisiones(elementos);
                     // Elimina todos los elementos que fueron destruidos
                     procesarElementosAQuitar();
-                }
+                }*/
             }
         }, GuerraAeronaves.TIEMPO_TICK, GuerraAeronaves.TIEMPO_TICK);
     }
@@ -239,32 +251,42 @@ public class Juego {
             }
         }
     }
-
-    // Actualiza las propiedades del avión en función de las teclas que 
-    // presionó el usuario y el estado actual del juego.
-    private void detectarTeclas(final Avion avion, int TECLA_ARRIBA, int TECLA_ABAJO
-            , int TECLA_IZQUIERDA, int TECLA_DERECHA, int TECLA_DISPARAR) {
-        if (avion != null) {
-            if(Gdx.input.isKeyPressed(TECLA_ARRIBA)) {
-                actualizarDireccionAvion(avion, Direccion.ARRIBA);
+    // Detecta las teclas que presionó el usuario.
+    private TeclasPresionadas detectarTeclas(int teclaArriba, int teclaDerecha, int teclaAbajo
+            , int teclaIzquierda, int teclaDisparar) {
+        
+        return new TeclasPresionadas(
+                  Gdx.input.isKeyPressed(teclaArriba)
+                , Gdx.input.isKeyPressed(teclaDerecha)
+                , Gdx.input.isKeyPressed(teclaAbajo)
+                , Gdx.input.isKeyPressed(teclaIzquierda)
+                , Gdx.input.isKeyPressed(teclaDisparar));
+    }
+    
+    // Aplica diferentes acciones al avión en función de las teclas que 
+    // fueron presionadas.
+    private void procesarTeclasPresionadas(Avion a, TeclasPresionadas tp) {
+        if (a != null) {
+            if(tp.isPresionadaTeclaArriba()) {
+                actualizarDireccionAvion(a, Direccion.ARRIBA);
             }
             
-            else if(Gdx.input.isKeyPressed(TECLA_ABAJO)) {
-                actualizarDireccionAvion(avion, Direccion.ABAJO);
+            else if(tp.isPresionadaTeclaAbajo()) {
+                actualizarDireccionAvion(a, Direccion.ABAJO);
             }
             
-            else if(Gdx.input.isKeyPressed(TECLA_IZQUIERDA)) {
-                actualizarDireccionAvion(avion, Direccion.IZQUIERDA);
+            else if(tp.isPresionadaTeclaIzquierda()) {
+                actualizarDireccionAvion(a, Direccion.IZQUIERDA);
             }
             
-            else if(Gdx.input.isKeyPressed(TECLA_DERECHA)) {
-                actualizarDireccionAvion(avion, Direccion.DERECHA);
+            else if(tp.isPresionadaTeclaDerecha()) {
+                actualizarDireccionAvion(a, Direccion.DERECHA);
             }
             
-            if (Gdx.input.isKeyPressed(TECLA_DISPARAR)) {
-                if (avion.getMuniciones() > 0) {
-                    Proyectil p = new Proyectil(avion.getDireccion(), avion.getProximaPosicion(), avion);
-                    avion.setMuniciones(avion.getMuniciones() - 1);
+            if (tp.isPresionadaTeclaDisparar()) {
+                if (a.getMuniciones() > 0) {
+                    Proyectil p = new Proyectil(a.getDireccion(), a.getProximaPosicion(), a);
+                    a.setMuniciones(a.getMuniciones() - 1);
                     Vector2 posicionEnMapa = calcularPosicionMapa(matrizMapa, centrosCasillas
                             , p.getPosicion().x, p.getPosicion().y);
                     p.setPosition(posicionEnMapa.x, posicionEnMapa.y);
@@ -273,8 +295,8 @@ public class Juego {
                     stage.addActor(p);
                 }               
             }
-        }
-    }
+        }        
+    }    
     
     // Remplaza el sprite del elemento por sprites de explosión durante un 
     // tiempo en segundos.

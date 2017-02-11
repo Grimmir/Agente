@@ -6,6 +6,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import guerra.aeronaves.ConexionTeclas;
 import guerra.aeronaves.Ganador;
 import guerra.aeronaves.GuerraAeronaves;
 import guerra.aeronaves.juego.JuegoListener;
@@ -17,7 +18,7 @@ public class ScreenJuego extends ScreenAdapter implements JuegoListener {
     private final Juego juego;
     private final GuerraAeronaves guerraAeronaves;
 
-    public ScreenJuego(GuerraAeronaves guerraAeronaves) {
+    public ScreenJuego(GuerraAeronaves guerraAeronaves, ConexionTeclas ct) {
         this.guerraAeronaves = guerraAeronaves;
 
         stage = new Stage(new FitViewport(GuerraAeronaves.calcularTamañoCasilla(Gdx
@@ -25,7 +26,7 @@ public class ScreenJuego extends ScreenAdapter implements JuegoListener {
                 , GuerraAeronaves.calcularTamañoCasilla(Gdx.graphics.getWidth()
                         , Gdx.graphics.getHeight()) * GuerraAeronaves.NUM_FILAS));
         
-        juego = new Juego(stage, leerMapa());
+        juego = new Juego(stage, leerMapa(), ct);
         juego.setJuegoListener(this);
         juego.iniciar();
 
