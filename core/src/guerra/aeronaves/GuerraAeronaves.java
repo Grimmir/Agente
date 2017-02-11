@@ -54,7 +54,7 @@ public class GuerraAeronaves extends Game {
             , ID_EXPLOSION = 71
             , MUNICIONES_AVION = 64
             , CANTIDAD_PICKUP_MUNICIONES = MUNICIONES_AVION / 3
-            , TICKS_DETECCION_TECLAS = 10
+            , TICKS_DETECCION_TECLAS = 1
             , TICKS_DETECCION_COLISIONES = 10
             , TICKS_ACTUALIZACION_AVIONES = 40
             , TICKS_ACTUALIZACION_PROYECTILES = 10

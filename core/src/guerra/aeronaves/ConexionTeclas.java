@@ -49,7 +49,7 @@ public class ConexionTeclas {
     }
     
     public boolean isConexionActiva() {
-        return so.isClosed();
+        return !so.isClosed();
     }
     
 }
