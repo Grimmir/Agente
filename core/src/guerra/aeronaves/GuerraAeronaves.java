@@ -70,6 +70,10 @@ public class GuerraAeronaves extends Game {
             , "explosion4.png"
             , "explosion5.png"
             , "explosion6.png");
+    
+    public static final String RUTA_CONEXIONES_TECLAS_AGENTE = "config/ConexionTeclasAgente.txt"
+            , RUTA_CONEXIONES_TECLAS_AMBIENTE = "config/ConexionTeclasAmbiente.txt";
+    
        
     @Override
     public void create () {
