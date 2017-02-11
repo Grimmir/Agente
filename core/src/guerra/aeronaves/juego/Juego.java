@@ -109,10 +109,12 @@ public class Juego {
                     //procesarTeclasPresionadas(avionAzul, tpAvionAzul);
                     
                     if (!conexionTeclas.isConexionActiva()) {
+                        System.out.println("NO CONECTADO A AMBIENTE");
                         conexionTeclas.cerrarConexion();
                         conexionTeclas.iniciarConexion();
                     }
                     else {
+                        System.out.println("CONECTADO A AMBIENTE");
                         conexionTeclas.enviarMensajeTeclas(tpAvionAzul);                        
                     }
                 }
