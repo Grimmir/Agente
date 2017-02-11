@@ -106,8 +106,15 @@ public class Juego {
                             , Keys.S
                             , Keys.A
                             , Keys.SPACE);
-                    //procesarTeclasPresionadas(avionAzul, tpAvionAzul);                                           
-                    conexionTeclas.enviarMensajeTeclas(tpAvionAzul);
+                    //procesarTeclasPresionadas(avionAzul, tpAvionAzul);
+                    
+                    if (!conexionTeclas.isConexionActiva()) {
+                        conexionTeclas.cerrarConexion();
+                        conexionTeclas.iniciarConexion();
+                    }
+                    else {
+                        conexionTeclas.enviarMensajeTeclas(tpAvionAzul);                        
+                    }
                 }
                 
                 /*if (ticks % GuerraAeronaves.TICKS_ACTUALIZACION_PROYECTILES == 0) {

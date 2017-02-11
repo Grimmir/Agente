@@ -3,7 +3,6 @@ package guerra.aeronaves;
 import guerra.aeronaves.juego.TeclasPresionadas;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.net.ConnectException;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,6 +46,10 @@ public class ConexionTeclas {
                 Logger.getLogger(ConexionTeclas.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+    
+    public boolean isConexionActiva() {
+        return so.isClosed();
     }
     
 }
