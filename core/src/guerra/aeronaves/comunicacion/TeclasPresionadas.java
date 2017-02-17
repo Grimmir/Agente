@@ -1,4 +1,4 @@
-package guerra.aeronaves.juego;
+package guerra.aeronaves.comunicacion;
 
 import java.io.Serializable;
 

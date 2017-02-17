@@ -4,15 +4,13 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import guerra.aeronaves.screens.*;
+import guerra.aeronaves.screens.ScreenConexion;
 import java.util.Arrays;
 import java.util.List;
 
 public class GuerraAeronaves extends Game {
    
     public SpriteBatch batch;
-    
-    private ScreenEditorNuevo sc_editor;
     
     private Music music_menu, music_edicion, music_juego;
     
@@ -71,19 +69,18 @@ public class GuerraAeronaves extends Game {
             , "explosion5.png"
             , "explosion6.png");
     
-    public static final String RUTA_CONEXIONES_TECLAS_AGENTE = "config/ConexionTeclasAgente.txt"
-            , RUTA_CONEXIONES_TECLAS_AMBIENTE = "config/ConexionTeclasAmbiente.txt";
+    public static final String RUTA_CONFIGURACION_CONEXION_AGENTE = "config/ConexionTeclasAgente.txt";
     
-       
     @Override
-    public void create () {
+    public void create() {
         batch = new SpriteBatch();
 
         music_menu = Gdx.audio.newMusic(Gdx.files.internal("sonidos/musica_menu.mp3"));
         music_edicion = Gdx.audio.newMusic(Gdx.files.internal("sonidos/musica_edicion.mp3"));
         music_juego = Gdx.audio.newMusic(Gdx.files.internal("sonidos/musica_juego.mp3"));
-
-        setScreenConexion();
+        
+        setScreen(new ScreenConexion());
+        setMusica(music_menu);
     }
 
     @Override
@@ -94,41 +91,6 @@ public class GuerraAeronaves extends Game {
     @Override
     public void dispose () {
         super.dispose();
-    }
-
-    public void setScreenMenuPrincipal() {
-        setScreen(new ScreenMenuPrincipal(this));
-        setMusica(music_menu);
-    }
-    public void setScreenJuego() {
-        setScreen(new ScreenJuego(this));
-        setMusica(music_juego);
-    }
-    public void setScreenMenuEditar() {
-        setScreen(new ScreenMenuEditar(this));
-        setMusica(music_menu);
-    }
-    public void setScreenEditor() {
-        setScreen(new ScreenExploradorArchivos(this));
-        setMusica(music_edicion);
-    }
-    public void setScreenEditorNuevo() {
-        sc_editor = new ScreenEditorNuevo(this);
-        setScreen(sc_editor);
-        setMusica(music_edicion);
-    }
-    
-    public void setScreenFinalizacionJuego(Ganador ganador) {
-        setScreen(new ScreenFinalizacionJuego(this, ganador));
-        setMusica(music_edicion);
-    }
-    
-    public void setScreenConexion() {
-        setScreen(new ScreenConexion(this));
-    }
-    
-    public ScreenEditorNuevo getScreenEditorNuevo() {
-        return sc_editor;
     }
 
     public void setMusica(Music m) {
