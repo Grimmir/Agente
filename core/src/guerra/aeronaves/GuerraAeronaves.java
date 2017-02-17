@@ -100,8 +100,8 @@ public class GuerraAeronaves extends Game {
         setScreen(new ScreenMenuPrincipal(this));
         setMusica(music_menu);
     }
-    public void setScreenJuego(ConexionTeclas ct) {
-        setScreen(new ScreenJuego(this, ct));
+    public void setScreenJuego() {
+        setScreen(new ScreenJuego(this));
         setMusica(music_juego);
     }
     public void setScreenMenuEditar() {
