@@ -16,5 +16,10 @@ public class Proyectil extends Elemento {
     public Elemento getElementoCreador() {
         return elementoCreador;
     }
+
+    @Override
+    public Elemento crearAPartirDe(Elemento e) {
+        return new Proyectil(e.getDireccion(), e.getPosicion(), null);
+    }
     
 }

@@ -52,7 +52,9 @@ public class GuerraAeronaves extends Game {
             , ID_EXPLOSION = 71
             , MUNICIONES_AVION = 64
             , CANTIDAD_PICKUP_MUNICIONES = MUNICIONES_AVION / 3
-            , TICKS_DETECCION_TECLAS = 1
+            , TICKS_SOLICITUD_DATOS_AMBIENTE = 5
+            , TICKS_ENVIO_DATOS_AGENTE = 5
+            , TICKS_DETECCION_TECLAS = 5
             , TICKS_DETECCION_COLISIONES = 10
             , TICKS_ACTUALIZACION_AVIONES = 40
             , TICKS_ACTUALIZACION_PROYECTILES = 10
@@ -79,7 +81,7 @@ public class GuerraAeronaves extends Game {
         music_edicion = Gdx.audio.newMusic(Gdx.files.internal("sonidos/musica_edicion.mp3"));
         music_juego = Gdx.audio.newMusic(Gdx.files.internal("sonidos/musica_juego.mp3"));
         
-        setScreen(new ScreenConexion());
+        setScreen(new ScreenConexion(this));
         setMusica(music_menu);
     }
 

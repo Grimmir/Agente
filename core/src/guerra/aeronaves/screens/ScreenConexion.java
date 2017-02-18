@@ -7,9 +7,11 @@ import guerra.aeronaves.comunicacion.ConexionListener;
 
 public class ScreenConexion extends ScreenMenu implements ConexionListener {
 
+    private final GuerraAeronaves guerraAeronaves;
     private final Conexion conexion;
 
-    public ScreenConexion() {
+    public ScreenConexion(GuerraAeronaves guerraAeronaves) {
+        this.guerraAeronaves = guerraAeronaves;
         conexion = new Conexion(DatosConexion.crearDesdeArchivoConfiguracion(
                 GuerraAeronaves.RUTA_CONFIGURACION_CONEXION_AGENTE));
         
@@ -26,6 +28,8 @@ public class ScreenConexion extends ScreenMenu implements ConexionListener {
     public void alEstablecerConexion() {
         System.out.println("Agente conectado a " + conexion.getDatosConexion()
                 .getHostCliente() + ":" + conexion.getDatosConexion().getPuertoCliente() + ".");
+        ScreenJuego sj = new ScreenJuego(conexion);
+        guerraAeronaves.setScreen(sj);
     }
 
 }

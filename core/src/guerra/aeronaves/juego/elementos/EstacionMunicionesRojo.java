@@ -9,4 +9,8 @@ public class EstacionMunicionesRojo extends EstacionMuniciones {
         super("estacion_misiles_rojo.png", GuerraAeronaves.ID_ESTACION_MUNICIONES_ROJO, posInicial);
     }
     
+    @Override
+    public Elemento crearAPartirDe(Elemento e) {
+        return new EstacionMunicionesRojo(e.getPosicion());
+    }
 }

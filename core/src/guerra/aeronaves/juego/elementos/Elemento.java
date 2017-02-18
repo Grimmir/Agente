@@ -8,8 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import guerra.aeronaves.Direccion;
 import java.awt.Point;
+import java.io.Serializable;
 
-public abstract class Elemento extends Image {
+public abstract class Elemento extends Image implements Serializable {
     
     protected final int id;
     protected Point posicion;
@@ -28,6 +29,8 @@ public abstract class Elemento extends Image {
         this.vida = vida;
     }
 
+    public abstract Elemento crearAPartirDe(Elemento e);
+    
     public int getId() {
         return id;
     }

@@ -9,5 +9,10 @@ public class Edificio extends Elemento {
     public Edificio(Point posicion) {
         super("edificio.png", GuerraAeronaves.ID_EDIFICIO, posicion, Direccion.ARRIBA, GuerraAeronaves.VIDA_EDIFICIO);
     }
+
+    @Override
+    public Elemento crearAPartirDe(Elemento e) {
+        return new Edificio(e.getPosicion());
+    }
     
 }

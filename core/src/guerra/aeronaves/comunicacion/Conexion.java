@@ -41,6 +41,7 @@ public class Conexion {
                
                 try {
                     thCliente.join();
+                    thServidor.join();
                 } 
                 catch (InterruptedException ex) {  }
                 
@@ -62,6 +63,14 @@ public class Conexion {
 
     public DatosConexion getDatosConexion() {
         return datosConexion;
+    }
+
+    public Servidor getServidor() {
+        return servidor;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
     }
     
 }

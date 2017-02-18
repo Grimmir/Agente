@@ -9,4 +9,9 @@ public class AvionAzul extends Avion {
         super("avion_azul.png", posicion, direccion);
     }
 
+    @Override
+    public Elemento crearAPartirDe(Elemento e) {
+        return new AvionAzul(e.getPosicion(), e.getDireccion());
+    }
+
 }

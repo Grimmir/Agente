@@ -10,4 +10,9 @@ public class PowerupMuniciones extends Elemento {
         super("powerup_municion.png", GuerraAeronaves.ID_POWERUP_MUNICIONES, posicion, Direccion.ARRIBA, GuerraAeronaves.VIDA_INFINITA);
     }
 
+    @Override
+    public Elemento crearAPartirDe(Elemento e) {
+        return new PowerupMuniciones(e.getPosicion());
+    }
+
 }
