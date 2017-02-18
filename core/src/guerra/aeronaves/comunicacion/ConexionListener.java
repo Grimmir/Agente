@@ -1,6 +1,6 @@
 package guerra.aeronaves.comunicacion;
 
-public interface ConexionAgenteListener {
+public interface ConexionListener {
     
     public void alEstablecerConexion();
     
