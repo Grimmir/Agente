@@ -10,8 +10,6 @@ import java.io.ObjectOutputStream;
 import static java.lang.Thread.sleep;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Cliente {
     
@@ -65,13 +63,17 @@ public class Cliente {
                         try {
                             if (solicitudPendienteDatosAgente) {
                                 objectOutputStream.writeObject(Mensaje.AMBIENTE_LECTURA_DATOS_AGENTE);
+                                System.out.println("ESPERANDO MENSAJE DE SERVIDOR");
                                 informarRecepcionDatos((DatosAgente)objectInputStream.readObject());
+                                System.out.println("FIN DE ESPERA MENSAJE SERVIDOR");
                                 solicitudPendienteDatosAgente = false;
                             }
 
                             if (solicitudPendienteDatosAmbiente) {
                                 objectOutputStream.writeObject(Mensaje.AGENTE_LECTURA_DATOS_AMBIENTE);
+                                System.out.println("ESPERANDO MENSAJE DE SERVIDOR");
                                 informarRecepcionDatos((DatosAmbiente)objectInputStream.readObject());
+                                System.out.println("FIN DE ESPERA MENSAJE SERVIDOR");
                                 solicitudPendienteDatosAmbiente = false;
                             }                            
                         }
@@ -80,7 +82,7 @@ public class Cliente {
                         } 
                         catch (ClassNotFoundException ex) {
                             //Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
-                        }                        
+                        }                     
                     }
                 }
             }

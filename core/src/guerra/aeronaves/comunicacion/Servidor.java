@@ -4,9 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.net.ServerSocket;
 import com.badlogic.gdx.net.Socket;
+import guerra.aeronaves.GuerraAeronaves;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import static java.lang.Thread.sleep;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,6 +25,8 @@ public class Servidor {
     
     private ObjectInputStream objectInputStream;
     private ObjectOutputStream objectOutputStream;
+    
+    private Object datoSolicitado;
 
     public Servidor(String host, int puerto) {
         this.host = host;
@@ -31,6 +35,8 @@ public class Servidor {
         
         solicitudPendienteDatosAgente = false;
         solicitudPendienteDatosAmbiente = false;
+        
+        datoSolicitado = null;
     }
 
     public void iniciar() {
@@ -52,20 +58,49 @@ public class Servidor {
         new Thread() {
             @Override
             public void run() {
+                try {
+                    sleep((int)Math.floor(GuerraAeronaves.TIEMPO_TICK));
+                } 
+                catch (InterruptedException ex) {
+                    //Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                if (socket != null && socket.isConnected() && objectOutputStream != null 
+                        && getDatoSolicitado() != null) {
+                    System.out.println("INTENTANDO ENVIAR DATOS AL AMBIENTE");
+                    try {
+                        objectOutputStream.writeObject(getDatoSolicitado());
+                        setDatoSolicitado(null);                        
+                    } 
+                    catch (IOException ex) {
+                        //Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }.start();
+        
+        new Thread() {
+            @Override
+            public void run() {
                 while (true) {
-                    if (socket != null && socket.isConnected()) {                        
+                    try {
+                        sleep((int)Math.floor(GuerraAeronaves.TIEMPO_TICK));
+                    } 
+                    catch (InterruptedException ex) {
+                        //Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    if (socket != null && socket.isConnected() && objectInputStream != null) {
                         try {
-                            if (objectInputStream != null && objectOutputStream != null) {
-                                Mensaje m = (Mensaje)objectInputStream.readObject();
-                            
-                                if (m == Mensaje.AMBIENTE_LECTURA_DATOS_AGENTE) {
-                                    setSolicitudPendienteDatosAgente(true);
-                                }
+                            System.out.println("ESPERANDO MENSAJES DEL CLIENTE");
+                            Mensaje m = (Mensaje)objectInputStream.readObject();
 
-                                else if (m == Mensaje.AGENTE_LECTURA_DATOS_AMBIENTE) {
-                                    setSolicitudPendienteDatosAmbiente(true);
-                                }
+                            if (m == Mensaje.AMBIENTE_LECTURA_DATOS_AGENTE) {
+                                setSolicitudPendienteDatosAgente(true);
                             }
+
+                            else if (m == Mensaje.AGENTE_LECTURA_DATOS_AMBIENTE) {
+                                setSolicitudPendienteDatosAmbiente(true);
+                            }
+                            System.out.println("FIN DE ESPERA MENSAJE CLIENTE");
                         } 
                         catch (IOException ex) {
                             //Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
@@ -101,23 +136,26 @@ public class Servidor {
         if (solicitudPendienteDatosAmbiente) {
             enviarDatosAlCliente(da);
         }
+        solicitudPendienteDatosAmbiente = false;
     }
     
     public void enviarDatosAlAmbiente(DatosAgente da) {
         if (solicitudPendienteDatosAgente) {
             enviarDatosAlCliente(da);
         }
+        solicitudPendienteDatosAgente = false;
     }
     
-    public void enviarDatosAlCliente(final Object o) {
-        if (socket != null && socket.isConnected()) {
-            try {
-                objectOutputStream.writeObject(o);
-            } 
-            catch (IOException ex) {
-                //Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public void enviarDatosAlCliente(Object o) {
+        setDatoSolicitado(o);
+    }
+    
+    private synchronized void setDatoSolicitado(Object o) {
+        datoSolicitado = o;
+    }
+    
+    private synchronized Object getDatoSolicitado() {
+        return datoSolicitado;
     }
     
     public String getHost() {

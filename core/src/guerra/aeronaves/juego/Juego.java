@@ -98,6 +98,7 @@ public class Juego implements ClienteListener {
         }, GuerraAeronaves.TIEMPO_TICK, GuerraAeronaves.TIEMPO_TICK);
     }
 
+    // Cuando recibe los datos del ambiente
     @Override
     public void alRecibirDatosServidor(Object datosServidor) {
         DatosAmbiente da = (DatosAmbiente)datosServidor;
@@ -108,8 +109,13 @@ public class Juego implements ClienteListener {
             copiaElementos.add(copiaElemento);
             posicionarElementoMapa(copiaElemento);           
         }
-        
+
         stage.getActors().clear();
+        Image fondo = new Image(new SpriteDrawable(new Sprite(new Texture(
+                Gdx.files.internal("cielo1.png")))));        
+        fondo.setFillParent(true);        
+        stage.addActor(fondo);   
+        
         agregarElementos(stage, copiaElementos);
         
         for (DatosExplosion de : da.getExplosiones()) {
