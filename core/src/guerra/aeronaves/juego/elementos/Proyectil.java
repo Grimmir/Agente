@@ -20,7 +20,12 @@ public class Proyectil extends Elemento {
 
     @Override
     public DatosElemento crearSerializable() {
-        return new guerra.aeronaves.comunicacion.elementos.Proyectil(direccion, posicion, null);
+        guerra.aeronaves.comunicacion.elementos.Proyectil p = 
+                new guerra.aeronaves.comunicacion.elementos.Proyectil(direccion, posicion, null);
+        
+        p.setVida(vida);
+        
+        return p;
     }
     
 }

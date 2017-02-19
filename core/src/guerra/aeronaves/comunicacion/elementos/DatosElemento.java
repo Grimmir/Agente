@@ -43,6 +43,10 @@ public abstract class DatosElemento {
     public float getVida() {
         return vida;
     }
+
+    public void setVida(float vida) {
+        this.vida = vida;
+    }
     
     public abstract Elemento crearElemento();
     

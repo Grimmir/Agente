@@ -16,6 +16,11 @@ public class EstacionMunicionesRojo extends EstacionMuniciones {
 
     @Override
     public Elemento crearElemento() {
-        return new guerra.aeronaves.juego.elementos.EstacionMunicionesRojo(posicion);
+        guerra.aeronaves.juego.elementos.EstacionMunicionesRojo ema = 
+                new guerra.aeronaves.juego.elementos.EstacionMunicionesRojo(posicion);
+        
+        ema.setVida(vida);
+        
+        return ema;
     }
 }

@@ -16,7 +16,12 @@ public class EstacionGasolinaRojo extends EstacionGasolina {
 
     @Override
     public Elemento crearElemento() {
-        return new guerra.aeronaves.juego.elementos.EstacionGasolinaRojo(posicion);
-    }
+        guerra.aeronaves.juego.elementos.EstacionGasolinaAzul egr = 
+                new guerra.aeronaves.juego.elementos.EstacionGasolinaAzul(posicion);
+        
+        egr.setVida(vida);
+        
+        return egr
+;    }
     
 }

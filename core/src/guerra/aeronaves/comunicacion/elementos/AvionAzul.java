@@ -16,7 +16,14 @@ public class AvionAzul extends Avion {
 
     @Override
     public Elemento crearElemento() {
-        return new guerra.aeronaves.juego.elementos.AvionAzul(posicion, direccion);
+        guerra.aeronaves.juego.elementos.AvionAzul aa = 
+                new guerra.aeronaves.juego.elementos.AvionAzul(posicion, direccion);
+        
+        aa.setVida(vida);
+        aa.setMuniciones(municiones);
+        aa.setGasolina(gasolina);
+        
+        return aa;
     }
 
 }

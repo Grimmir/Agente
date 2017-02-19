@@ -16,8 +16,13 @@ public class Edificio extends DatosElemento {
     }
 
     @Override
-    public Elemento crearElemento() {
-        return new guerra.aeronaves.juego.elementos.Edificio(posicion);
+    public Elemento crearElemento() {        
+        guerra.aeronaves.juego.elementos.Edificio e = 
+                new guerra.aeronaves.juego.elementos.Edificio(posicion);
+        
+        e.setVida(vida);
+        
+        return e;
     }
     
 }

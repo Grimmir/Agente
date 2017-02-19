@@ -5,8 +5,12 @@ import java.io.Serializable;
 
 public class DatosExplosion implements Serializable {
     
-    private final Point posicion;
-    private final float tiempo;
+    private Point posicion;
+    private float tiempo;
+
+    public DatosExplosion() {
+
+    }
 
     public DatosExplosion(Point posicion, float tiempo) {
         this.posicion = posicion;

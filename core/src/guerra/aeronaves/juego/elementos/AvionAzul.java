@@ -12,7 +12,14 @@ public class AvionAzul extends Avion {
 
     @Override
     public DatosElemento crearSerializable() {
-        return new guerra.aeronaves.comunicacion.elementos.AvionAzul(posicion, direccion);
+        guerra.aeronaves.comunicacion.elementos.AvionAzul aa = 
+                new guerra.aeronaves.comunicacion.elementos.AvionAzul(posicion, direccion);
+        
+        aa.setVida(vida);
+        aa.setMuniciones(municiones);
+        aa.setGasolina(gasolina);
+        
+        return aa;
     }
 
 }

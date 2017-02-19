@@ -32,6 +32,7 @@ public class Red {
         
         kryo.register(Direccion.class);
         kryo.register(TeclasPresionadas.class);
+        kryo.register(DatosExplosion.class);
         
         kryo.register(AvionAzul.class);
         kryo.register(AvionRojo.class);

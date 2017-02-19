@@ -26,5 +26,13 @@ public abstract class Avion extends DatosElemento {
     public int getGasolina() {
         return gasolina;
     }
+
+    public void setMuniciones(int municiones) {
+        this.municiones = municiones;
+    }
+
+    public void setGasolina(int gasolina) {
+        this.gasolina = gasolina;
+    }
     
 }

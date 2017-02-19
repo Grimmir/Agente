@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
+import guerra.aeronaves.Direccion;
 import guerra.aeronaves.GuerraAeronaves;
 import guerra.aeronaves.comunicacion.ClienteListener;
 import guerra.aeronaves.comunicacion.DatosExplosion;
@@ -35,9 +36,12 @@ import guerra.aeronaves.juego.elementos.PickupMuniciones;
 import guerra.aeronaves.juego.elementos.PickupVida;
 import guerra.aeronaves.juego.elementos.PowerupMuniciones;
 import guerra.aeronaves.juego.elementos.PowerupVida;
+import java.awt.Point;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class Juego implements ClienteListener {  
 
@@ -48,6 +52,8 @@ public class Juego implements ClienteListener {
     private final List<Vector2> centrosCasillas;
     private final Sound sonidoExplosion;
     private final GuerraAeronaves guerraAeronaves;
+    private AvionAzul avionAzul;
+    private AvionRojo avionRojo;
     
     public Juego(Stage stage, GuerraAeronaves guerraAeronaves) {
         this.stage = stage;
@@ -61,6 +67,9 @@ public class Juego implements ClienteListener {
                 Gdx.files.internal("cielo1.png")))));        
         fondo.setFillParent(true);
         stage.addActor(fondo);        
+        
+        avionAzul = new AvionAzul(new Point(0, 0), Direccion.ARRIBA);
+        avionRojo = new AvionRojo(new Point(0, 0), Direccion.ARRIBA);
         
         timer = new Timer();
         ticks = 0;
@@ -103,6 +112,17 @@ public class Juego implements ClienteListener {
             Elemento nuevoElemento = de.crearElemento();
             nuevosElementos.add(nuevoElemento);
             posicionarElementoMapa(nuevoElemento);
+        }
+        
+        AvionAzul aa = buscarAvionAzul(nuevosElementos);
+        AvionRojo ar = buscarAvionRojo(nuevosElementos);
+        
+        if (aa != null) {
+            avionAzul = aa;
+        }
+        
+        if (ar != null) {
+            avionRojo = ar;
         }
         
         stage.getActors().clear();
@@ -214,4 +234,62 @@ public class Juego implements ClienteListener {
         e.setPosition(posicionMapa.x, posicionMapa.y);
     }    
     
+    public int getGasAvionRojo() {
+        return avionRojo.getGasolina();
+    }
+    
+    public float getVidaAvionRojo() {
+        return avionRojo.getVida();
+    }
+    
+    public int getMunicionAvionRojo() {
+        return avionRojo.getMuniciones();
+    }
+    
+    public int getGasAvionAzul() {
+        return avionAzul.getGasolina();
+    }
+    
+    public float getVidaAvionAzul() {
+        return avionAzul.getVida();
+    }
+    
+    public int getMunicionAvionAzul() {
+        return avionAzul.getMuniciones();
+    }
+    
+    // Retorna el primer avión azul que consiga en un arreglo de elementos. 
+    // Si no encuentra ninguno, devuelve null.
+    private AvionAzul buscarAvionAzul(List<Elemento> es) {
+        return (AvionAzul)es.stream().filter(new Predicate<Elemento>() {
+            @Override
+            public boolean test(Elemento e) {
+                return e instanceof AvionAzul;
+            }
+        })
+        .findFirst().orElseGet(new Supplier<Elemento>() {
+            @Override
+            public Elemento get() {
+                return null;
+            }
+        });
+    }
+
+    // Retorna el primer avión rojo que consiga en un arreglo de elementos. 
+    // Si no encuentra ninguno, devuelve null.    
+    private AvionRojo buscarAvionRojo(List<Elemento> es) {
+        return (AvionRojo)es.stream()
+                .filter(new Predicate<Elemento>() {
+                    @Override
+                    public boolean test(Elemento e) {
+                        return e instanceof AvionRojo;
+                    }
+                })
+                .findFirst().orElseGet(new Supplier<Elemento>() {
+                    @Override
+                    public Elemento get() {
+                        return null;
+                    }
+                });       
+    }    
 }

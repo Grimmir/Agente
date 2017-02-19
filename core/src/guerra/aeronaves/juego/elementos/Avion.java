@@ -5,8 +5,8 @@ import guerra.aeronaves.GuerraAeronaves;
 import java.awt.Point;
 
 public abstract class Avion extends Elemento {
-    private int municiones;
-    private int gasolina;
+    protected int municiones;
+    protected int gasolina;
     
     public Avion(String rutaSprite, Point posicion, Direccion direccion) {
         super(rutaSprite, GuerraAeronaves.ID_AVION_AZUL, posicion, direccion, GuerraAeronaves.VIDA_AVION);

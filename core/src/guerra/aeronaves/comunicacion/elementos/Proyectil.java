@@ -24,7 +24,12 @@ public class Proyectil extends DatosElemento {
 
     @Override
     public Elemento crearElemento() {
-        return new guerra.aeronaves.juego.elementos.Proyectil(direccion, posicion, null);
+        guerra.aeronaves.juego.elementos.Proyectil p = 
+                new guerra.aeronaves.juego.elementos.Proyectil(direccion, posicion, null);
+        
+        p.setVida(vida);
+        
+        return p;
     }
     
 }

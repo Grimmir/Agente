@@ -12,7 +12,12 @@ public class EstacionMunicionesAzul extends EstacionMuniciones {
 
     @Override
     public DatosElemento crearSerializable() {
-        return new guerra.aeronaves.comunicacion.elementos.EstacionMunicionesAzul(posicion);
+        guerra.aeronaves.comunicacion.elementos.EstacionMunicionesAzul ema = 
+                new guerra.aeronaves.comunicacion.elementos.EstacionMunicionesAzul(posicion);
+        
+        ema.setVida(vida);
+        
+        return ema;
     }
     
 }

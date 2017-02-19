@@ -13,7 +13,12 @@ public class Edificio extends Elemento {
 
     @Override
     public DatosElemento crearSerializable() {
-        return new guerra.aeronaves.comunicacion.elementos.Edificio(posicion);
+        guerra.aeronaves.comunicacion.elementos.Edificio e = 
+                new guerra.aeronaves.comunicacion.elementos.Edificio(posicion);
+        
+        e.setVida(vida);
+        
+        return e;
     }
     
 }

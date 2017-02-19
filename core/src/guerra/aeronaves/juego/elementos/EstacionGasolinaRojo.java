@@ -12,7 +12,12 @@ public class EstacionGasolinaRojo extends EstacionGasolina {
 
     @Override
     public DatosElemento crearSerializable() {
-        return new guerra.aeronaves.comunicacion.elementos.EstacionGasolinaRojo(posicion);
+        guerra.aeronaves.comunicacion.elementos.EstacionGasolinaRojo egr = 
+                new guerra.aeronaves.comunicacion.elementos.EstacionGasolinaRojo(posicion);
+        
+        egr.setVida(vida);
+        
+        return egr;
     }
     
 }
