@@ -2,6 +2,7 @@ package guerra.aeronaves.juego.elementos;
 
 import guerra.aeronaves.Direccion;
 import guerra.aeronaves.GuerraAeronaves;
+import guerra.aeronaves.comunicacion.elementos.DatosElemento;
 import java.awt.Point;
 
 public class Nube extends Elemento {
@@ -12,8 +13,8 @@ public class Nube extends Elemento {
     }
 
     @Override
-    public Elemento crearAPartirDe(Elemento e) {
-        return new Nube(e.getPosicion(), e.getDireccion());
+    public DatosElemento crearSerializable() {
+        return new guerra.aeronaves.comunicacion.elementos.Nube(posicion, direccion);
     }
     
 }

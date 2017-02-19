@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import guerra.aeronaves.Direccion;
+import guerra.aeronaves.comunicacion.elementos.DatosElemento;
 import java.awt.Point;
 import java.io.Serializable;
 
@@ -28,8 +29,6 @@ public abstract class Elemento extends Image implements Serializable {
         proximaDireccion = this.direccion;
         this.vida = vida;
     }
-
-    public abstract Elemento crearAPartirDe(Elemento e);
     
     public int getId() {
         return id;
@@ -136,5 +135,7 @@ public abstract class Elemento extends Image implements Serializable {
                 setRotation(90);
         }         
     }
+    
+    public abstract DatosElemento crearSerializable();
     
 }

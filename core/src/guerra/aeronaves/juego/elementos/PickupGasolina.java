@@ -2,6 +2,7 @@ package guerra.aeronaves.juego.elementos;
 
 import guerra.aeronaves.Direccion;
 import guerra.aeronaves.GuerraAeronaves;
+import guerra.aeronaves.comunicacion.elementos.DatosElemento;
 import java.awt.Point;
 
 public class PickupGasolina extends Elemento {
@@ -11,8 +12,8 @@ public class PickupGasolina extends Elemento {
     }
 
     @Override
-    public Elemento crearAPartirDe(Elemento e) {
-        return new PickupGasolina(e.getPosicion());
+    public DatosElemento crearSerializable() {
+        return new guerra.aeronaves.comunicacion.elementos.PickupGasolina(posicion);
     }
     
 }

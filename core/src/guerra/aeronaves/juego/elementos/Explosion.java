@@ -2,6 +2,7 @@ package guerra.aeronaves.juego.elementos;
 
 import guerra.aeronaves.Direccion;
 import guerra.aeronaves.GuerraAeronaves;
+import guerra.aeronaves.comunicacion.elementos.DatosElemento;
 import java.awt.Point;
 
 public class Explosion extends Elemento {
@@ -11,8 +12,8 @@ public class Explosion extends Elemento {
     }
 
     @Override
-    public Elemento crearAPartirDe(Elemento e) {
-        return new Explosion(GuerraAeronaves.RUTA_EXPLOSIONES.get(0), e.getPosicion());
+    public DatosElemento crearSerializable() {
+        return new guerra.aeronaves.comunicacion.elementos.Explosion(posicion);
     }
     
 }

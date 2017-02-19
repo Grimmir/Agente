@@ -1,6 +1,7 @@
 package guerra.aeronaves.juego.elementos;
 
 import guerra.aeronaves.GuerraAeronaves;
+import guerra.aeronaves.comunicacion.elementos.DatosElemento;
 import java.awt.Point;
 
 public class EstacionGasolinaRojo extends EstacionGasolina {
@@ -10,8 +11,8 @@ public class EstacionGasolinaRojo extends EstacionGasolina {
     }
 
     @Override
-    public Elemento crearAPartirDe(Elemento e) {
-        return new EstacionGasolinaRojo(e.getPosicion());
+    public DatosElemento crearSerializable() {
+        return new guerra.aeronaves.comunicacion.elementos.EstacionGasolinaRojo(posicion);
     }
     
 }

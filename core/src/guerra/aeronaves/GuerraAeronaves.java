@@ -4,7 +4,9 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import guerra.aeronaves.screens.ScreenConexion;
+import guerra.aeronaves.comunicacion.Conexion;
+import guerra.aeronaves.comunicacion.DatosConexion;
+import guerra.aeronaves.screens.ScreenJuego;
 import java.util.Arrays;
 import java.util.List;
 
@@ -52,13 +54,12 @@ public class GuerraAeronaves extends Game {
             , ID_EXPLOSION = 71
             , MUNICIONES_AVION = 64
             , CANTIDAD_PICKUP_MUNICIONES = MUNICIONES_AVION / 3
-            , TICKS_SOLICITUD_DATOS_AMBIENTE = 5
-            , TICKS_ENVIO_DATOS_AGENTE = 5
             , TICKS_DETECCION_TECLAS = 5
             , TICKS_DETECCION_COLISIONES = 10
             , TICKS_ACTUALIZACION_AVIONES = 40
             , TICKS_ACTUALIZACION_PROYECTILES = 10
             , TICKS_ACTUALIZACION_NUBES = 60
+            , TICKS_ENVIO_PAQUETE_DATOS = 5
             , GASOLINA_AVION = (int)Math.round(20 / (TICKS_ACTUALIZACION_AVIONES * TIEMPO_TICK))
             , CANTIDAD_PICKUP_GASOLINA = GASOLINA_AVION / 3
             ;            
@@ -73,6 +74,8 @@ public class GuerraAeronaves extends Game {
     
     public static final String RUTA_CONFIGURACION_CONEXION_AGENTE = "config/ConexionTeclasAgente.txt";
     
+    private Conexion conexion;
+    
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -81,7 +84,10 @@ public class GuerraAeronaves extends Game {
         music_edicion = Gdx.audio.newMusic(Gdx.files.internal("sonidos/musica_edicion.mp3"));
         music_juego = Gdx.audio.newMusic(Gdx.files.internal("sonidos/musica_juego.mp3"));
         
-        setScreen(new ScreenConexion(this));
+        conexion = new Conexion(DatosConexion.crearDesdeArchivo(RUTA_CONFIGURACION_CONEXION_AGENTE));
+        conexion.abrir();
+        
+        setScreen(new ScreenJuego(this));
         setMusica(music_menu);
     }
 
@@ -93,6 +99,7 @@ public class GuerraAeronaves extends Game {
     @Override
     public void dispose () {
         super.dispose();
+        //conexion.cerrar();
     }
 
     public void setMusica(Music m) {
@@ -140,5 +147,9 @@ public class GuerraAeronaves extends Game {
     public static final int getNumFilasEditor() {
         return NUM_FILAS;
     }  
+
+    public Conexion getConexion() {
+        return conexion;
+    }
     
 }

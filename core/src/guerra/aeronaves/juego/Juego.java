@@ -13,11 +13,12 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 import guerra.aeronaves.GuerraAeronaves;
 import guerra.aeronaves.comunicacion.ClienteListener;
-import guerra.aeronaves.comunicacion.Conexion;
-import guerra.aeronaves.comunicacion.DatosAgente;
-import guerra.aeronaves.comunicacion.DatosAmbiente;
 import guerra.aeronaves.comunicacion.DatosExplosion;
+import guerra.aeronaves.comunicacion.PaqueteDatos;
+import guerra.aeronaves.comunicacion.PaqueteDatosAgente;
+import guerra.aeronaves.comunicacion.PaqueteDatosAmbiente;
 import guerra.aeronaves.comunicacion.TeclasPresionadas;
+import guerra.aeronaves.comunicacion.elementos.DatosElemento;
 import guerra.aeronaves.juego.elementos.AvionAzul;
 import guerra.aeronaves.juego.elementos.AvionRojo;
 import guerra.aeronaves.juego.elementos.Edificio;
@@ -41,18 +42,16 @@ import java.util.List;
 public class Juego implements ClienteListener {  
 
     private final Stage stage;
-    private final Conexion conexion;
     private final Timer timer;
     private int ticks;
     private TeclasPresionadas teclasPresionadas;
     private final List<Vector2> centrosCasillas;
     private final Sound sonidoExplosion;
+    private final GuerraAeronaves guerraAeronaves;
     
-    public Juego(Stage stage, Conexion conexion) {
+    public Juego(Stage stage, GuerraAeronaves guerraAeronaves) {
         this.stage = stage;
-        this.conexion = conexion;
-        
-        conexion.getCliente().getListeners().add(this);
+        this.guerraAeronaves = guerraAeronaves;
         
         sonidoExplosion = Gdx.audio.newSound(Gdx.files.internal("sonidos/snd_explosion.wav"));
         
@@ -67,19 +66,17 @@ public class Juego implements ClienteListener {
         ticks = 0;
         
         // Valor inicial de las teclas presionadas
-        teclasPresionadas = new TeclasPresionadas(false, false, false, false, false);
+        teclasPresionadas = new TeclasPresionadas(false, false, false, false, false);        
     }
 
     public void iniciar() {
+        guerraAeronaves.getConexion().getCliente().getListeners().clear();
+        guerraAeronaves.getConexion().getCliente().getListeners().add(this);
         timer.clear();
         timer.scheduleTask(new Task() {
             @Override
             public void run() {
                 ticks = (ticks == Long.MAX_VALUE) ? 0 : ticks + 1;
-                
-                if (ticks % GuerraAeronaves.TICKS_SOLICITUD_DATOS_AMBIENTE == 0) {
-                    conexion.getCliente().solicitarDatosAmbiente();
-                }
                 
                 if (ticks % GuerraAeronaves.TICKS_DETECCION_TECLAS == 0) {
                     teclasPresionadas = detectarTeclas(  
@@ -90,35 +87,33 @@ public class Juego implements ClienteListener {
                             , Keys.SPACE);
                 }
                 
-                if (ticks % GuerraAeronaves.TICKS_ENVIO_DATOS_AGENTE == 0) {
-                    conexion.getServidor().enviarDatosAlAmbiente(new DatosAgente(
-                            teclasPresionadas));
-                }
+                if (ticks % GuerraAeronaves.TICKS_ENVIO_PAQUETE_DATOS == 0) {
+                    guerraAeronaves.getConexion().getServidor().enviarPaqueteDatos(
+                            new PaqueteDatosAgente(teclasPresionadas));
+                }                
             }
         }, GuerraAeronaves.TIEMPO_TICK, GuerraAeronaves.TIEMPO_TICK);
     }
 
-    // Cuando recibe los datos del ambiente
     @Override
-    public void alRecibirDatosServidor(Object datosServidor) {
-        DatosAmbiente da = (DatosAmbiente)datosServidor;
-        List<Elemento> copiaElementos = new ArrayList<Elemento>();
+    public void alRecibirPaqueteDatos(PaqueteDatos paqueteDatos) {
+        List<Elemento> nuevosElementos = new ArrayList<Elemento>();
         
-        for (Elemento e : da.getElementosVisibles()) {
-            Elemento copiaElemento = e.crearAPartirDe(e);
-            copiaElementos.add(copiaElemento);
-            posicionarElementoMapa(copiaElemento);           
+        for (DatosElemento de : ((PaqueteDatosAmbiente)paqueteDatos).getElementosVisibles()) {
+            Elemento nuevoElemento = de.crearElemento();
+            nuevosElementos.add(nuevoElemento);
+            posicionarElementoMapa(nuevoElemento);
         }
-
+        
         stage.getActors().clear();
+        
         Image fondo = new Image(new SpriteDrawable(new Sprite(new Texture(
                 Gdx.files.internal("cielo1.png")))));        
-        fondo.setFillParent(true);        
-        stage.addActor(fondo);   
+        fondo.setFillParent(true);
+        stage.addActor(fondo);        
+        agregarElementos(stage, nuevosElementos);
         
-        agregarElementos(stage, copiaElementos);
-        
-        for (DatosExplosion de : da.getExplosiones()) {
+        for (DatosExplosion de : ((PaqueteDatosAmbiente)paqueteDatos).getExplosiones()) {
             crearExplosion(de);
         }
     }

@@ -4,12 +4,16 @@ import java.io.Serializable;
 
 public class TeclasPresionadas implements Serializable {
     
-    private final boolean
+    private boolean
               presionadaTeclaArriba
             , presionadaTeclaDerecha
             , presionadaTeclaAbajo
             , presionadaTeclaIzquierda
             , presionadaTeclaDisparar;
+    
+    public TeclasPresionadas() {
+        
+    }
     
     public TeclasPresionadas(boolean tArr, boolean tDer, boolean tAba, boolean tIzq, boolean tDis) {
         presionadaTeclaArriba = tArr;
